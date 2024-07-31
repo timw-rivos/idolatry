@@ -170,7 +170,7 @@ pub fn generate_server_conversions(
                 writeln!(out, "#[repr(C, packed)]")?;
                 writeln!(
                     out,
-                    "#[derive(Copy, Clone, zerocopy::FromBytes, zerocopy::Unaligned)]"
+                    "#[derive(Copy, Clone, zerocopy::FromBytes, zerocopy::FromZeroes, zerocopy::Unaligned)]"
                 )?;
             }
             syntax::Encoding::Ssmarshal => {
@@ -258,7 +258,7 @@ pub fn generate_server_conversions(
                 writeln!(out, "{{")?;
                 writeln!(
                     out,
-                    "    Some(zerocopy::LayoutVerified::<_, {}_{}_ARGS>::new_unaligned(bytes)?",
+                    "    Some(zerocopy::Ref::<_, {}_{}_ARGS>::new_unaligned(bytes)?",
                     iface.name, name
                 )?;
                 writeln!(out, "        .into_ref())")?;

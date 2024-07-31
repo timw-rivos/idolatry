@@ -13,7 +13,7 @@ use userlib::{
     sys_reply_fault, FromPrimitive, LeaseAttributes, RecvMessage,
     ReplyFaultReason, TaskId,
 };
-use zerocopy::{AsBytes, FromBytes};
+use zerocopy::{AsBytes, FromBytes, FromZeroes};
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 #[repr(u32)]
@@ -560,7 +560,7 @@ impl<T> Leased<W, [T]> {
 /// These functions are available on any readable lease (that is, read-only or
 /// read-write) where the content type `T` is `Sized` and can be moved around by
 /// naive mem-copy.
-impl<A: AttributeRead, T: Sized + Copy + FromBytes + AsBytes> Leased<A, T> {
+impl<A: AttributeRead, T: Sized + Copy + FromBytes + FromZeroes + AsBytes> Leased<A, T> {
     /// Reads the leased value by copy.
     ///
     /// If the lending task has been restarted between the time we checked lease
@@ -582,7 +582,7 @@ impl<A: AttributeRead, T: Sized + Copy + FromBytes + AsBytes> Leased<A, T> {
 /// These functions are available on any readable leased slice (that is,
 /// read-only or read-write) where the element type `T` is `Sized` and can be
 /// moved around by naive mem-copy.
-impl<A: AttributeRead, T: Sized + Copy + FromBytes + AsBytes> Leased<A, [T]> {
+impl<A: AttributeRead, T: Sized + Copy + FromBytes + FromZeroes + AsBytes> Leased<A, [T]> {
     /// Reads a single element of the leased slice by copy.
     ///
     /// Like indexing a native slice, `index` must be less than `self.len()`, or

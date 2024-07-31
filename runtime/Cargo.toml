@@ -7,4 +7,4 @@ edition = "2021"
 
 [dependencies]
 userlib = {git = "https://github.com/oxidecomputer/hubris"}
-zerocopy = "0.6.1"
+zerocopy = { version = "0.7.35", default-features = false, features = ["byteorder", "derive"] }

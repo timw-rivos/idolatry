@@ -347,12 +347,12 @@ pub fn generate_client_stub(
                     syntax::Encoding::Zerocopy => {
                         writeln!(out, "        let _len = len;")?;
                         let reply_ty = format!("{}_{}_REPLY", iface.name, name);
-                        writeln!(out, "        #[derive(zerocopy::FromBytes, zerocopy::Unaligned)]")?;
+                        writeln!(out, "        #[derive(zerocopy::FromBytes, zerocopy::FromZeroes, zerocopy::Unaligned)]")?;
                         writeln!(out, "        #[repr(C, packed)]")?;
                         writeln!(out, "        struct {} {{", reply_ty)?;
                         writeln!(out, "            value: {},", t.repr_ty())?;
                         writeln!(out, "        }}")?;
-                        writeln!(out, "        let lv = zerocopy::LayoutVerified::<_, {}>::new_unaligned(&reply[..])", reply_ty)?;
+                        writeln!(out, "        let lv = zerocopy::Ref::<_, {}>::new_unaligned(&reply[..])", reply_ty)?;
                         writeln!(out, "            .unwrap_lite();")?;
                         writeln!(
                             out,
@@ -391,7 +391,7 @@ pub fn generate_client_stub(
                     syntax::Encoding::Zerocopy => {
                         writeln!(out, "        let _len = len;")?;
                         let reply_ty = format!("{}_{}_REPLY", iface.name, name);
-                        writeln!(out, "            #[derive(zerocopy::FromBytes, zerocopy::Unaligned)]")?;
+                        writeln!(out, "            #[derive(zerocopy::FromBytes, zerocopy::FromZeroes, zerocopy::Unaligned)]")?;
                         writeln!(out, "            #[repr(C, packed)]")?;
                         writeln!(out, "            struct {} {{", reply_ty)?;
                         writeln!(
@@ -400,7 +400,7 @@ pub fn generate_client_stub(
                             ok.repr_ty()
                         )?;
                         writeln!(out, "            }}")?;
-                        writeln!(out, "            let lv = zerocopy::LayoutVerified::<_, {}>::new_unaligned(&reply[..])", reply_ty)?;
+                        writeln!(out, "            let lv = zerocopy::Ref::<_, {}>::new_unaligned(&reply[..])", reply_ty)?;
                         writeln!(out, "                .unwrap_lite();")?;
                         writeln!(
                             out,
